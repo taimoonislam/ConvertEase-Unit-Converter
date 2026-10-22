@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f9ff">
+
+    <meta name="description" content="ConvertEase makes everyday unit conversions simple, fast and convenient.">
+    <title>ConvertEase — Smart Unit Converter</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="app-shell">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="#" class="brand" aria-label="ConvertEase home">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="13" fill="currentColor" />
+                        <path d="M11 14H28M24 10L28 14L24 18" stroke="white" stroke-width="2.3" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M29 26H12M16 22L12 26L16 30" stroke="white" stroke-width="2.3" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </span>
+
+                <span class="brand-name">Convert<span>Ease</span></span>
+            </a>
+
+            <div class="sidebar-caption" data-i18n="workspace">
+                WORKSPACE
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <button class="nav-item active" data-view="converter" type="button">
+                    <span class="nav-icon" aria-hidden="true">⇄</span>
+                    <span data-i18n="converter">Converter</span>
+                </button>
+
+                <button class="nav-item" data-view="history" type="button">
+                    <span class="nav-icon" aria-hidden="true">◷</span>
+                    <span data-i18n="history">History</span>
+                    <span class="nav-count" id="historyCount">0</span>
+                </button>
+
+                <button class="nav-item" data-view="favorites" type="button">
+                    <span class="nav-icon" aria-hidden="true">☆</span>
+                    <span data-i18n="favorites">Favorites</span>
+                    <span class="nav-count" id="favoriteCount">0</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-caption category-caption" data-i18n="categories">
+                CATEGORIES
+            </div>
+
+            <nav class="category-nav" id="categoryNav" aria-label="Conversion categories">
+                <button class="category-item active" data-category="length" type="button">
+                    <span class="category-icon length-icon">↔</span>
+                    <span data-i18n="length">Length</span>
+                </button>
+
+                <button class="category-item" data-category="weight" type="button">
+                    <span class="category-icon weight-icon">⚖</span>
+                    <span data-i18n="weight">Weight</span>
+                </button>
+
+                <button class="category-item" data-category="temperature" type="button">
+                    <span class="category-icon temperature-icon">°</span>
+                    <span data-i18n="temperature">Temperature</span>
+                </button>
+
+                <button class="category-item" data-category="area" type="button">
+                    <span class="category-icon area-icon">▧</span>
+                    <span data-i18n="area">Area</span>
+                </button>
+
+                <button class="category-item" data-category="volume" type="button">
+                    <span class="category-icon volume-icon">◈</span>
+                    <span data-i18n="volume">Volume</span>
+                </button>
+
+                <button class="category-item" data-category="speed" type="button">
+                    <span class="category-icon speed-icon">↗</span>
+                    <span data-i18n="speed">Speed</span>
+                </button>
+
+                <button class="category-item" data-category="time" type="button">
+                    <span class="category-icon time-icon">◷</span>
+                    <span data-i18n="time">Time</span>
+                </button>
+
+                <button class="category-item" data-category="data" type="button">
+                    <span class="category-icon data-icon">▤</span>
+                    <span data-i18n="data">Data Storage</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-tip">
+                    <span class="tip-icon">✦</span>
+                    <p data-i18n="sidebarTip">
+                        Little conversions. Big convenience.
+                    </p>
+                </div>
+
+                <div class="sidebar-footer">
+                    <span class="status-dot"></span>
+                    <span data-i18n="ready">Ready when you are</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main application -->
+        <main class="main-content">
+
+            <!-- Top bar -->
+            <header class="topbar">
+                <button class="mobile-menu icon-button" id="menuToggle" type="button" aria-label="Toggle navigation"
+                    aria-expanded="false">
+                    ☰
+                </button>
+
+                <div class="breadcrumb">
+                    <span data-i18n="workspace">WORKSPACE</span>
+                    <span class="breadcrumb-divider">/</span>
+                    <strong id="breadcrumbTitle">Converter</strong>
+                </div>
+
+                <div class="topbar-actions">
+                    <label class="language-control">
+                        <span class="language-symbol" aria-hidden="true">文</span>
+                        <select id="languageSelect" aria-label="Choose language">
+                            <option value="en">English</option>
+                            <option value="bn">বাংলা</option>
+                            <option value="bt">Banglish</option>
+                        </select>
+                    </label>
+
+                    <button class="icon-button theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"
+                        title="Switch theme">
+                        <span id="themeIcon" aria-hidden="true">☾</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Converter view -->
+            <section class="page-view" id="converterView">
+
+                <section class="welcome-section">
+                    <div class="welcome-copy">
+                        <div class="eyebrow">
+                            <span class="eyebrow-dot"></span>
+                            <span data-i18n="welcomeEyebrow">YOUR EVERYDAY CONVERSION TOOL</span>
+                        </div>
+
+                        <h1 data-i18n="welcomeTitle">
+                            Make every unit<br>
+                            <span>make sense.</span>
+                        </h1>
+
+                        <p class="welcome-description" data-i18n="welcomeDescription">
+                            From tiny measurements to big ideas, convert anything with ease.
+                        </p>
+                    </div>
+
+                    <div class="welcome-art" aria-hidden="true">
+                        <div class="art-orbit orbit-one"></div>
+                        <div class="art-orbit orbit-two"></div>
+                        <div class="art-center">⇄</div>
+                        <span class="art-chip chip-top">km</span>
+                        <span class="art-chip chip-left">kg</span>
+                        <span class="art-chip chip-right">°C</span>
+                        <span class="art-chip chip-bottom">GB</span>
+                        <span class="art-spark spark-one">✳</span>
+                        <span class="art-spark spark-two">✦</span>
+                    </div>
+                </section>
+
+                <!-- Quick presets -->
+                <section class="quick-section">
+                    <div class="section-heading">
+                        <div>
+                            <h2 data-i18n="quickTitle">Quick conversions</h2>
+                            <p data-i18n="quickDescription">
+                                Jump into a commonly used conversion.
+                            </p>
+                        </div>
+
+                        <span class="section-decoration" aria-hidden="true">✳</span>
+                    </div>
+
+                    <div class="quick-grid" id="quickPresets">
+                        <button class="quick-card" type="button" data-quick="km-mi">
+                            <span class="quick-card-icon quick-blue">↔</span>
+                            <span class="quick-card-copy">
+                                <strong>km <span>→</span> mi</strong>
+                                <small data-i18n="travel">Travel</small>
+                            </span>
+                            <span class="quick-arrow">↗</span>
+                        </button>
+
+                        <button class="quick-card" type="button" data-quick="c-f">
+                            <span class="quick-card-icon quick-orange">°</span>
+                            <span class="quick-card-copy">
+                                <strong>°C <span>→</span> °F</strong>
+                                <small data-i18n="weather">Weather</small>
+                            </span>
+                            <span class="quick-arrow">↗</span>
+                        </button>
+
+                        <button class="quick-card" type="button" data-quick="kg-lb">
+                            <span class="quick-card-icon quick-purple">⚖</span>
+                            <span class="quick-card-copy">
+                                <strong>kg <span>→</span> lb</strong>
+                                <small data-i18n="fitness">Fitness</small>
+                            </span>
+                            <span class="quick-arrow">↗</span>
+                        </button>
+
+                        <button class="quick-card" type="button" data-quick="gb-mb">
+                            <span class="quick-card-icon quick-cyan">▤</span>
+                            <span class="quick-card-copy">
+                                <strong>GB <span>→</span> MB</strong>
+                                <small data-i18n="technology">Technology</small>
+                            </span>
+                            <span class="quick-arrow">↗</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Main converter card -->
+                <section class="converter-card">
+                    <div class="converter-card-header">
+                        <div class="converter-heading">
+                            <span class="converter-heading-icon">⇄</span>
+                            <div>
+                                <h2 data-i18n="converterTitle">Unit converter</h2>
+                                <p data-i18n="converterSubtitle">
+                                    Precision made simple.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button class="favorite-button" id="favoriteToggle" type="button" aria-pressed="false">
+                            <span id="favoriteIcon" aria-hidden="true">☆</span>
+                            <span data-i18n="saveFavorite">Save favorite</span>
+                        </button>
+                    </div>
+
+                    <div class="conversion-workspace">
+
+                        <!-- Input side -->
+                        <div class="unit-panel input-panel">
+                            <label class="field-label" for="inputValue" data-i18n="from">
+                                FROM
+                            </label>
+
+                            <div class="unit-select-wrap">
+                                <select id="fromUnit" aria-label="Convert from unit">
+                                    <option value="m">Meter (m)</option>
+                                    <option value="km">Kilometer (km)</option>
+                                    <option value="cm">Centimeter (cm)</option>
+                                    <option value="mm">Millimeter (mm)</option>
+                                    <option value="mi">Mile (mi)</option>
+                                    <option value="ft">Foot (ft)</option>
+                                    <option value="in">Inch (in)</option>
+                                    <option value="yd">Yard (yd)</option>
+                                </select>
+                                <span class="select-chevron" aria-hidden="true">⌄</span>
+                            </div>
+
+                            <input id="inputValue" class="value-input" type="number" inputmode="decimal" step="any"
+                                value="1" placeholder="Enter a value" aria-label="Value to convert">
+
+                            <div class="unit-hint">
+                                <span class="hint-dot"></span>
+                                <span data-i18n="enterValue">Enter your value</span>
+                            </div>
+                        </div>
+
+                        <!-- Swap button -->
+                        <div class="swap-column">
+                            <button class="swap-button" id="swapUnits" type="button" aria-label="Swap conversion units"
+                                title="Swap units">
+                                <span aria-hidden="true">⇄</span>
+                            </button>
+                        </div>
+
+                        <!-- Result side -->
+                        <div class="unit-panel result-panel">
+                            <label class="field-label" for="toUnit" data-i18n="to">
+                                TO
+                            </label>
+
+                            <div class="unit-select-wrap">
+                                <select id="toUnit" aria-label="Convert to unit">
+                                    <option value="km">Kilometer (km)</option>
+                                    <option value="m">Meter (m)</option>
+                                    <option value="cm">Centimeter (cm)</option>
+                                    <option value="mm">Millimeter (mm)</option>
+                                    <option value="mi">Mile (mi)</option>
+                                    <option value="ft">Foot (ft)</option>
+                                    <option value="in">Inch (in)</option>
+                                    <option value="yd">Yard (yd)</option>
+                                </select>
+                                <span class="select-chevron" aria-hidden="true">⌄</span>
+                            </div>
+
+                            <output class="value-output" id="resultValue" aria-live="polite"
+                                aria-atomic="true">0.001</output>
+
+                            <div class="unit-hint result-hint">
+                                <span class="result-check">✓</span>
+                                <span data-i18n="convertedInstantly">Converted instantly</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="conversion-footer">
+                        <div class="formula-display">
+                            <span class="formula-icon">ƒ</span>
+                            <div>
+                                <span class="formula-label" data-i18n="formulaLabel">
+                                    CONVERSION FORMULA
+                                </span>
+                                <p id="formulaText">1 m = 0.001 km</p>
+                            </div>
+                        </div>
+
+                        <div class="converter-actions">
+                            <button class="secondary-button" id="resetConverter" type="button">
+                                <span aria-hidden="true">↺</span>
+                                <span data-i18n="reset">Reset</span>
+                            </button>
+
+                            <button class="primary-button" id="copyResult" type="button">
+                                <span aria-hidden="true">▢</span>
+                                <span data-i18n="copyResult">Copy result</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent history preview -->
+                <section class="recent-section">
+                    <div class="section-heading recent-heading">
+                        <div>
+                            <h2 data-i18n="recentTitle">Recent conversions</h2>
+                            <p data-i18n="recentDescription">
+                                Your latest calculations, all in one place.
+                            </p>
+                        </div>
+
+                        <button class="text-button" id="viewAllHistory" type="button">
+                            <span data-i18n="viewAll">View all</span>
+                            <span aria-hidden="true">↗</span>
+                        </button>
+                    </div>
+
+                    <div class="history-list" id="recentHistory">
+                        <div class="empty-state">
+                            <span class="empty-icon">◷</span>
+                            <p data-i18n="emptyHistory">
+                                Your conversions will appear here.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- History view -->
+            <section class="page-view secondary-view" id="historyView" hidden>
+                <div class="page-intro">
+                    <span class="eyebrow" data-i18n="historyEyebrow">YOUR ACTIVITY</span>
+                    <h1 data-i18n="historyTitle">Conversion history</h1>
+                    <p data-i18n="historyDescription">
+                        Revisit your recent conversions whenever you need them.
+                    </p>
+                </div>
+
+                <div class="list-card">
+                    <div class="list-card-header">
+                        <h2 data-i18n="allHistory">All conversions</h2>
+                        <button class="secondary-button" id="clearHistory" type="button">
+                            <span aria-hidden="true">⌫</span>
+                            <span data-i18n="clearHistory">Clear history</span>
+                        </button>
+                    </div>
+
+                    <div class="history-list full-history-list" id="fullHistory">
+                        <div class="empty-state">
+                            <span class="empty-icon">◷</span>
+                            <p data-i18n="emptyHistory">Your conversions will appear here.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Favorites view -->
+            <section class="page-view secondary-view" id="favoritesView" hidden>
+                <div class="page-intro">
+                    <span class="eyebrow" data-i18n="favoritesEyebrow">YOUR SHORTCUTS</span>
+                    <h1 data-i18n="favoritesTitle">Favorite conversions</h1>
+                    <p data-i18n="favoritesDescription">
+                        Keep the conversions you use most within easy reach.
+                    </p>
+                </div>
+
+                <div class="favorites-grid" id="favoritesList">
+                    <div class="empty-state">
+                        <span class="empty-icon">☆</span>
+                        <p data-i18n="emptyFavorites">
+                            Save a conversion to find it here.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="app-footer">
+                <a href="#" class="footer-brand">ConvertEase<span>®</span></a>
+                <p data-i18n="footerText">
+                    Made for everyday moments that need a little clarity.
+                </p>
+                <span class="footer-version">v1.0</span>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Toast messages -->
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+        <span class="toast-icon" id="toastIcon">✓</span>
+        <span id="toastMessage">Done!</span>
+    </div>
+
+</body>
+
+</html>
